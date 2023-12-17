@@ -1,12 +1,7 @@
-#!/usr/bin/env python
-
-import datetime
 import re
 
 import psycopg2
 import yaml
-
-import config
 
 
 class HededocDB(object):
@@ -16,8 +11,13 @@ class HededocDB(object):
     notes_since_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes" WHERE "updatedAt" >= %s;'
     notes_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes";'
 
-    def __init__(self):
-        self.conn = psycopg2.connect(dbname=config.dbname, user=config.user, password=config.password, host=config.host)
+    def __init__(self, config):
+        print(config)
+        self.conn = psycopg2.connect(
+            dbname=config["HEDGEDOC_DATABASE"],
+            user=config["HEDGEDOC_DB_USER"],
+            password=config["HEDGEDOC_DB_PASS"],
+            host=config["HEDGEDOC_DB_HOST"])
 
     def get_notes_since(self, minimum_datetime=None):
         with self.conn.cursor() as cur:
@@ -53,18 +53,9 @@ class HededocDB(object):
             pass
         return set(res)
 
-    def __del__(self):
-        self.conn.close()
 
-
-def test():
-    db = HededocDB()
-    given_datetime = datetime.datetime(1970, 1, 1, 0, 0, 0)
-    for idx, title, shortid, content, updatedAt in db.get_notes_since(given_datetime):
-        tags = db.extract_tags(content)
+def test(hedgedoc, minimum_datatime):
+    for _idx, title, _shortid, content, _updateAt in hedgedoc.get_notes_since(minimum_datatime):
+        tags = hedgedoc.extract_tags(content)
         if tags:
-            print(idx, shortid, title, tags)
-
-
-if __name__ == "__main__":
-    test()
+            yield(title, tags)
