@@ -13,22 +13,24 @@ class HededocDB(object):
 
     # Back in the CodiMD it was: '###### tags: `features` `cool` `updated`'
     legacy_tag_key = '###### tags:'
-    notes_since_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes" WHERE "updatedAt" > %s;'
+    notes_since_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes" WHERE "updatedAt" >= %s;'
+    notes_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes";'
 
     def __init__(self):
         self.conn = psycopg2.connect(dbname=config.dbname, user=config.user, password=config.password, host=config.host)
 
-    def get_notes_since(self, minimum_datetime):
-        cur = self.conn.cursor()
-        cur.execute(self.notes_since_query, (minimum_datetime, ))
-        res = cur.fetchall()
-        cur.close()
-        return res
+    def get_notes_since(self, minimum_datetime=None):
+        with self.conn.cursor() as cur:
+            if minimum_datetime is None:
+                cur.execute(self.notes_query)
+            else:
+                cur.execute(self.notes_since_query, (minimum_datetime, ))
+            return cur.fetchall()
 
     def parse_yaml_tags(self, document):
         if not isinstance(document, dict):
             return []
-        return [t for t in (tag for tag in document.get("tags", "").split(",")) if t.strip()]
+        return filter(bool, map(str.strip, document.get("tags", "").split(",")))
 
     def parse_legacy_tags(self, line):
         tags_part = line.split(self.legacy_tag_key)[1]
