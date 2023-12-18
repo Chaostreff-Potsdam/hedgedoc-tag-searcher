@@ -4,15 +4,14 @@ import psycopg2
 import yaml
 
 
-class HededocDB(object):
+class Hededoc(object):
 
     # Back in the CodiMD it was: '###### tags: `features` `cool` `updated`'
     legacy_tag_key = '###### tags:'
-    notes_since_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes" WHERE "updatedAt" >= %s;'
-    notes_query = 'SELECT id, title, shortid, content, "updatedAt" FROM "Notes";'
+    notes_since_query = 'SELECT id, content, "updatedAt" FROM "Notes" WHERE "updatedAt" >= %s;'
+    notes_query = 'SELECT id, content, "updatedAt" FROM "Notes";'
 
     def __init__(self, config):
-        print(config)
         self.conn = psycopg2.connect(
             dbname=config["HEDGEDOC_DATABASE"],
             user=config["HEDGEDOC_DB_USER"],
@@ -40,7 +39,7 @@ class HededocDB(object):
         res = []
         # In CodiMD we used # and backticks
         if not text:
-            return res
+            return set()
         for line in text.split("\n"):
             if self.legacy_tag_key in line:
                 res.extend(self.parse_legacy_tags(line))
@@ -52,10 +51,14 @@ class HededocDB(object):
         except yaml.error.YAMLError:
             pass
         return set(res)
-
-
-def test(hedgedoc, minimum_datatime):
-    for _idx, title, _shortid, content, _updateAt in hedgedoc.get_notes_since(minimum_datatime):
-        tags = hedgedoc.extract_tags(content)
-        if tags:
-            yield(title, tags)
+           
+    def get_pad_field(self, uuid, field):
+        with self.conn.cursor() as cur:
+            try:
+                cur.execute(f'SELECT {field} FROM "Notes" WHERE id = %s', (uuid, ))
+                return cur.fetchone()[0]
+            except:
+                return None
+    
+    def get_pad_title(self, uuid):
+        return self.get_pad_field(uuid, "title")

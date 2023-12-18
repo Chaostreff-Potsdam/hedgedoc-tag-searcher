@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, ForeignKeyConstraint, exc
 from typing import List
 from sqlalchemy.orm import declarative_base, mapped_column, relationship, Mapped
 
@@ -36,6 +36,15 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f'<Tag text={self.text}>'
+    
+    @classmethod
+    def get_or_create(cls, text):
+        tag = cls.query.filter_by(text=text).first()
+        if not tag:
+            tag = cls(text=text)
+            db.session.add(tag)
+            db.session.commit()
+        return tag
 
 
 class Pad(db.Model):
@@ -48,3 +57,6 @@ class Pad(db.Model):
 
     def __repr__(self):
         return f'<Pad uuid={self.uuid}, updatedAt={self.updatedAt}>'
+
+def drop_all():
+    pass

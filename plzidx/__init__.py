@@ -1,8 +1,6 @@
 import os
 
-from flask import Flask
-
-import plzidx.hedgedocdb
+from flask import Flask, g
 
 def create_app(test_config=None):
     ### App Setup
@@ -27,16 +25,29 @@ def create_app(test_config=None):
     from . import db
     db.init_db(app)
 
-    hedgedoc = plzidx.hedgedocdb.HededocDB(app.config)
+
+    import plzidx.hedgedoc
+    hedgedoc = plzidx.hedgedoc.Hededoc(app.config)
+
+    @app.before_request
+    def before_request():
+        g.hedgedoc = hedgedoc
 
     ### Routes
+
+    import plzidx.plzidx
 
     @app.route('/')
     def index():
         return 'Yes, I index'
     
-    @app.route('/hdtest')
-    def hdtest():
-        return '<br />'.join("%s: %r" % t for t in plzidx.hedgedocdb.test(hedgedoc, None))
+    @app.route('/rebuild')
+    def rebuild():
+        plzidx.plzidx.rebuild()
+        return 'OK'
+    
+    @app.route('/dump')
+    def dump():
+        return '\n'.join(plzidx.plzidx.dump())
 
     return app
