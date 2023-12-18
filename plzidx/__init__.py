@@ -24,6 +24,9 @@ def create_app(test_config=None):
 
     ### Components Setup
 
+    from . import db
+    db.init_db(app)
+
     hedgedoc = plzidx.hedgedocdb.HededocDB(app.config)
 
     ### Routes
