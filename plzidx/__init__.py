@@ -25,13 +25,13 @@ def create_app(test_config=None):
     from . import db
     db.init_db(app)
 
+    from . import cli
+    cli.init_cli(app)
 
-    import plzidx.hedgedoc
-    hedgedoc = plzidx.hedgedoc.Hededoc(app.config)
 
     @app.before_request
     def before_request():
-        g.hedgedoc = hedgedoc
+        g.hedgedoc = app.hedgedoc
 
     ### Routes
 

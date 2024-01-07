@@ -8,8 +8,8 @@ class Hededoc(object):
 
     # Back in the CodiMD it was: '###### tags: `features` `cool` `updated`'
     legacy_tag_key = '###### tags:'
-    notes_since_query = 'SELECT id, content, "updatedAt" FROM "Notes" WHERE "updatedAt" >= %s;'
-    notes_query = 'SELECT id, content, "updatedAt" FROM "Notes";'
+    notes_since_clause = ' WHERE "updatedAt" >= %s'
+    notes_query = 'SELECT id, content, title, alias, shortid, "updatedAt" FROM "Notes"'
 
     def __init__(self, config):
         self.conn = psycopg2.connect(
@@ -21,9 +21,9 @@ class Hededoc(object):
     def get_notes_since(self, minimum_datetime=None):
         with self.conn.cursor() as cur:
             if minimum_datetime is None:
-                cur.execute(self.notes_query)
+                cur.execute(self.notes_query + ";")
             else:
-                cur.execute(self.notes_since_query, (minimum_datetime, ))
+                cur.execute(self.notes_query + self.notes_since_clause + ";", (minimum_datetime, ))
             return cur.fetchall()
 
     def parse_yaml_tags(self, document):

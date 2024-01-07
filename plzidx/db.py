@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, ForeignKeyConstraint, exc
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, ForeignKeyConstraint
 from typing import List
 from sqlalchemy.orm import declarative_base, mapped_column, relationship, Mapped
 
@@ -53,10 +53,15 @@ class Pad(db.Model):
     uuid: Mapped[str] = mapped_column(String, primary_key=True, nullable=False)
     updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)
 
+    title: Mapped[str] = mapped_column(String)
+    url: Mapped[str] = mapped_column(String, nullable=False)
+
     tags: Mapped[List['Tag']] = relationship('Tag', secondary=association_table, back_populates='pads')
 
     def __repr__(self):
         return f'<Pad uuid={self.uuid}, updatedAt={self.updatedAt}>'
 
 def drop_all():
-    pass
+    association_table.delete()
+    Tag.query.delete()
+    Pad.query.delete()
