@@ -5,10 +5,10 @@ from flask import Flask, g
 def create_app(test_config=None):
     ### App Setup
 
+    from . import config_template
+
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='development',
-    )
+    app.config.from_mapping(config_template.default_config)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=False)

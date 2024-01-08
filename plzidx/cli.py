@@ -2,10 +2,10 @@ import click
 from flask import Blueprint, g, current_app
 from flask.cli import with_appcontext
 
-from . import plzidx, hedgedoc
+from . import plzidx, hedgedoc, config_template
 
 
-bp = Blueprint('worker', __name__)
+bp = Blueprint('plzidx-ctrl', __name__)
 
 def with_hedgedoc_g(a_func):
 
@@ -20,7 +20,7 @@ def with_hedgedoc_g(a_func):
 @with_appcontext
 @with_hedgedoc_g
 def update():
-    plzidx.rebuild()
+    plzidx.update()
 
 
 @bp.cli.command('dump')
@@ -28,6 +28,12 @@ def update():
 @with_hedgedoc_g
 def dump():
     print("".join(plzidx.dump()))
+
+
+@bp.cli.command('createconfig')
+@click.option('-o', '--output', 'output', default='-', type=click.File('w'), show_default=True)
+def createconfig(output):
+    print(config_template.create_config_template(), file=output)
 
 
 def init_cli(app):

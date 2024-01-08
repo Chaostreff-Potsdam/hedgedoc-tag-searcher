@@ -3,11 +3,19 @@ from flask import g, current_app
 from plzidx.db import db, Tag, Pad, drop_all
 
 
+def pad_is_indexable(tags):
+    return current_app.config['MARKER_TAG'] in tags
+
+
 def rebuild():
     drop_all()
     for uuid, content, title, alias, shortid, updatedAt in g.hedgedoc.get_notes_since():
+        tags = g.hedgedoc.extract_tags(content)
+        if not (current_app.config['INDEX_ALL_PADS'] or pad_is_indexable(tags)):
+            continue
+
         pad = Pad(uuid=uuid, updatedAt=updatedAt, title=title, url=(alias or shortid))
-        for tag in map(Tag.get_or_create, g.hedgedoc.extract_tags(content)):
+        for tag in (Tag.get_or_create(t) for t in tags if t != current_app.config['MARKER_TAG']):
             pad.tags.append(tag)
             db.session.add(pad)
 
@@ -24,13 +32,14 @@ Things that might have changed:
     7. a pad's plzidx tag gained a password
 """
 
-def update(last_date):
+def update(last_date=None):
     # For now, just rebuild
     rebuild()
 
 
 def format_pad(pad):
    return f"<a href=\"{current_app.config['PAD_URL'] + pad.url}\">{pad.title}</a>"
+
 
 def dump():
     yield "<ul>"
