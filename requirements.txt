@@ -1,4 +1,6 @@
 Flask
 Flask-SQLAlchemy
 psycopg2-binary
+
 pyyaml
+python-dotenv

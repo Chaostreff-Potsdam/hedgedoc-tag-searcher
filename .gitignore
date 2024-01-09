@@ -1,12 +1,12 @@
 venv/*
 .venv/*
 
+.env
 config.py
+instance/
 
 *.pyc
 __pycache__/
-
-instance/
 
 .pytest_cache/
 .coverage

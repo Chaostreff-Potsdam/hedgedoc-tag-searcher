@@ -9,7 +9,7 @@ default_config = dict(
 
 def create_config_template():
 	return f"""## Example configuration for the hedgedoc-tag-searcher service
-## Lines prefixed with one hash-sign (`#`), denote preset default values
+## Lines prefixed with one hash-sign (`#`) denote preset default values
 
 ## Keep this secret in production systems
 SECRET_KEY = "{secrets.token_hex()}"
@@ -22,7 +22,7 @@ HEDGEDOC_DB_PASS =
 HEDGEDOC_DB_HOST =
 
 ## Web URL of your pad (will be used to create links)
-PAD_URL = "https://pad.example.com/"
+PAD_URL = "https://pad.example.com"
 
 ## SQLAlchemy URI for our own databse
 ## See https://docs.sqlalchemy.org/core/engines.html for possible values like
