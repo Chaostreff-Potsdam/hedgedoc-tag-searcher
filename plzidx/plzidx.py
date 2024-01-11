@@ -38,7 +38,12 @@ def update(last_date=None):
 
 
 def format_pad(pad):
-   return f"<a href=\"{current_app.config['PAD_URL'] + pad.url}\">{pad.title}</a>"
+   return f"<a href=\"{current_app.config['PAD_URL']}/{pad.url}\">{pad.title}</a>"
+
+
+def most_common_tags(start_tag, n=5):
+    t = Tag.query.filter_by(text=start_tag).first()
+    return "\n".join(f"<li>{t.text}</li>" for t in Tag.get_related_tags([t], n))
 
 
 def dump():

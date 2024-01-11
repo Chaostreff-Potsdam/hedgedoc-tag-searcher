@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, g
+from flask_font_awesome import FontAwesome
 
 def create_app(test_config=None):
     ### App Setup
@@ -14,6 +15,8 @@ def create_app(test_config=None):
         app.config.from_pyfile('config.py', silent=False)
     else:    
         app.config.from_mapping(test_config)
+
+    print(app.config)
         
     try:
         os.makedirs(app.instance_path)
@@ -28,26 +31,22 @@ def create_app(test_config=None):
     from . import cli
     cli.init_cli(app)
 
+    font_awesome = FontAwesome()
+    font_awesome.init_app(app)
 
     @app.before_request
+    @cli.with_hedgedoc_g
     def before_request():
-        g.hedgedoc = app.hedgedoc
+        pass
 
     ### Routes
 
-    import plzidx.plzidx
+    from . import dashboard
+    app.register_blueprint(dashboard.bp)
 
-    @app.route('/')
-    def index():
-        return 'Yes, I index'
-    
-    @app.route('/rebuild')
-    def rebuild():
-        plzidx.plzidx.rebuild()
-        return 'OK'
-    
+    import plzidx
     @app.route('/dump')
     def dump():
-        return '\n'.join(plzidx.plzidx.dump())
+        return "".join(plzidx.plzidx.dump())
 
     return app

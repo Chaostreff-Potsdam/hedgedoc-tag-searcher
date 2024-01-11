@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  {% if config.BRAND_BULMA_URL %}
+    <link rel="stylesheet" href="{{ config.BRAND_BULMA_URL }}">
+  {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+  {% endif %}
+
+  {{ font_awesome.load_js() }}
+
+  {% block additional_static_files %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <span class="navbar-item">
+      {% if config.BRAND_LOGO_URL %}
+        <img class="brand-logo" src="{{ config.BRAND_LOGO_URL }}">
+      {% else %}
+		<i class="fa-solid fa-magnifying-glass-arrow-right fa-2x brand-logo"></i>
+      {% endif %}
+      PLZIDX
+    </span>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="plzidx-navbar">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+	</a>
+  </div>
+
+  <div id="plzidx-navbar" class="navbar-menu">
+    <div class="navbar-start">
+    </div>
+  </div>
+</nav>
+
+
+<main>
+<section class="section">
+  <div class="container">
+    <div class="content">
+      <div class="columns is-centered">
+        <div class="column is-three-quarters">
+          <header>
+            <h1 class="title is-2 is-capitalized">{% block header %}{% endblock %}</h1>
+            {% block subtitle %}{% endblock %}
+          </header>
+
+          {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="notification{{ '' if category == 'message' else ' is-' + category }}">
+                {{ message }}
+            </div>
+          {% endfor %}
+        
+        {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+</body>
+</html>

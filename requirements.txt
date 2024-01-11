@@ -1,6 +1,7 @@
 Flask
+Font-Awesome-Flask
 Flask-SQLAlchemy
-psycopg2-binary
 
+psycopg2-binary
 pyyaml
 python-dotenv

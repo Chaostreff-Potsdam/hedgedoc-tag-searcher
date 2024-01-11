@@ -5,6 +5,7 @@ default_config = dict(
 	SECRET_KEY="development",
 	MARKER_TAG="plzidx",
 	INDEX_ALL_PADS=False,
+	FONT_AWESOME_SERVE_LOCAL=True,
 )
 
 def create_config_template():
@@ -34,4 +35,7 @@ SQLALCHEMY_DATABASE_URI =
 
 ## If the MARKER_TAG should be ignored and all pads indexed instead
 # INDEX_ALL_PADS = {default_config["INDEX_ALL_PADS"]}
+
+## Config value overrding default of https://github.com/sgraaf/font-awesome-flask
+# FONT_AWESOME_SERVE_LOCAL = True
 """
