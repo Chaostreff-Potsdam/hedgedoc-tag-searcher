@@ -4,7 +4,7 @@
 
 <div class="tags are-large">
 {% for tag in common_tags %}
-  <a class="tag is-primary" href="{{ url_for('.pads_with_tags', tag_path=tag.text) }}">{{ tag.text }}</a>
+  <a class="tag is-info" href="{{ url_for('.pads_with_tags', tag_path=tag.text) }}">{{ tag.text }}</a>
 {% endfor %}
 </div>
 

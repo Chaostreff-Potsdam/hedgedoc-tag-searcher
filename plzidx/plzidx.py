@@ -45,17 +45,11 @@ def most_common(n=5):
     return Tag.get_most_common(n)
 
 
-def most_common_tags_and_pads(tag_text_list, n=5):
+def pads_with_tags(tag_text_list):
     if not tag_text_list:
-        related = most_common(n)
-    else:
-        tag_list = Tag.query.filter(Tag.text.in_(tag_text_list)).all()
-        related = Tag.get_related_tags(tag_list, n)
+        return []
     
-    pads = sorted(Pad.get_by_taglist(tag_text_list), key=lambda p: p.title)
-
-    return related, pads
-
+    return sorted(Pad.get_by_taglist(tag_text_list), key=lambda p: p.title)
 
 def dump():
     yield "<ul>"

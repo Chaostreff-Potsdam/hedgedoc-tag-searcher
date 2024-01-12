@@ -11,9 +11,9 @@ def remove_duplicates(seq):
 @bp.route('/pads/<path:tag_path>', methods=['GET'])
 def pads_with_tags(tag_path):
 	tag_text_list = remove_duplicates(filter(bool, tag_path.split('/')))
-	related_tags, pads = plzidx.most_common_tags_and_pads(tag_text_list)
+	pads = plzidx.pads_with_tags(tag_text_list)
 
-	return render_template('pads.html', related_tags=related_tags, pads=pads, tag_text_list=tag_text_list)
+	return render_template('pads.html', pads=pads, tag_text_list=tag_text_list)
 
 @bp.route('/pads/', methods=['GET'])
 @bp.route('/')
