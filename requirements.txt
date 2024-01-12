@@ -1,5 +1,4 @@
 Flask
-Font-Awesome-Flask
 Flask-SQLAlchemy
 
 psycopg2-binary

@@ -10,36 +10,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
   {% endif %}
 
-  {{ font_awesome.load_js() }}
-
   {% block additional_static_files %}{% endblock %}
 </head>
 <body>
-
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <span class="navbar-item">
-      {% if config.BRAND_LOGO_URL %}
-        <img class="brand-logo" src="{{ config.BRAND_LOGO_URL }}">
-      {% else %}
-		<i class="fa-solid fa-magnifying-glass-arrow-right fa-2x brand-logo"></i>
-      {% endif %}
-      PLZIDX
-    </span>
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="plzidx-navbar">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-	</a>
-  </div>
-
-  <div id="plzidx-navbar" class="navbar-menu">
-    <div class="navbar-start">
-    </div>
-  </div>
-</nav>
-
-
 <main>
 <section class="section">
   <div class="container">

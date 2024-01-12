@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, g
-from flask_font_awesome import FontAwesome
 
 def create_app(test_config=None):
     ### App Setup
@@ -30,9 +29,6 @@ def create_app(test_config=None):
 
     from . import cli
     cli.init_cli(app)
-
-    font_awesome = FontAwesome()
-    font_awesome.init_app(app)
 
     @app.before_request
     @cli.with_hedgedoc_g
