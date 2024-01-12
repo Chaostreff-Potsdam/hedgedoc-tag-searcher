@@ -9,16 +9,19 @@
   {% else %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
   {% endif %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plzidx.css') }}">
 
   {% block additional_static_files %}{% endblock %}
 </head>
+
 <body>
+
 <main>
 <section class="section">
   <div class="container">
     <div class="content">
       <div class="columns is-centered">
-        <div class="column is-three-quarters">
+        <div class="column is-four-fifths">
 
           {% for category, message in get_flashed_messages(with_categories=true) %}
             <div class="notification{{ '' if category == 'message' else ' is-' + category }}">
@@ -33,5 +36,12 @@
   </div>
 </section>
 </main>
+
+<footer class="footer">
+	<div class="content has-text-centered">
+		Only indexing pads with {% if not config.INDEX_ALL_PADS %} maker tag <code>{{ config.MARKER_TAG }}</code> and {% endif %}permissions {% for perm in config.PAD_PERMISSION_FILTER %}<code>{{ perm }}</code>{% if not loop.last %}, {% endif %}{% endfor %}.
+	</div>
+</footer>
+
 </body>
 </html>
