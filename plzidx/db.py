@@ -112,6 +112,8 @@ class Pad(db.Model):
 
 
 def drop_all():
-    association_table.delete()
-    Tag.query.delete()
-    Pad.query.delete()
+    db.session.query(association_table).delete()
+    db.session.query(Pad).delete()
+    db.session.query(Tag).delete()
+    db.session.commit()
+
