@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% block title %}Pads{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+<div class="field is-grouped is-grouped-multiline">
+	{% for tag in tag_text_list %}
+	<div class="control">
+		<div class="tags has-addons are-large">
+			{% set other_tags = tag_text_list | reject('equalto', tag) %}
+			{% set tag_path = other_tags | join('/') %}
+			<span class="tag is-info">{{ tag }}</span>
+			<a class="tag is-delete" href="{{ url_for('.pads_with_tags', tag_path=tag_path) }}"></a>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<hr />
+
+<ul>
+{% for pad in pads %}
+<li><a href="{{ config.PAD_URL }}/{{ pad.url }}">{{ pad.title }}</a>
+
+	{% for tag in pad.sorted_tags() %}
+
+		{% if tag.text in tag_text_list %}
+			<span class="tag is-info">{{ tag.text }}</span>
+		{% else %}
+			<a class="tag is-info is-light" href="{{ url_for('.pads_with_tags', tag_path='/'.join(tag_text_list + [tag.text])) }}">{{ tag.text }}</a>
+		{% endif %}
+
+	{% endfor %}
+
+</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

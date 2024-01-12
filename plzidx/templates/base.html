@@ -46,10 +46,6 @@
     <div class="content">
       <div class="columns is-centered">
         <div class="column is-three-quarters">
-          <header>
-            <h1 class="title is-2 is-capitalized">{% block header %}{% endblock %}</h1>
-            {% block subtitle %}{% endblock %}
-          </header>
 
           {% for category, message in get_flashed_messages(with_categories=true) %}
             <div class="notification{{ '' if category == 'message' else ' is-' + category }}">

@@ -90,6 +90,9 @@ class Pad(db.Model):
     def __repr__(self):
         return f'<Pad uuid={self.uuid}, updatedAt={self.updatedAt}>'
     
+    def sorted_tags(self):
+        return sorted(self.tags, key=lambda t: t.text)
+
     # Return the pads which have all the given tags (matched by text string)
     @classmethod
     def get_by_taglist(cls, tag_text_list):

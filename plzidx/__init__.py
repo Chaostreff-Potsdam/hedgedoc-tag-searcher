@@ -41,12 +41,7 @@ def create_app(test_config=None):
 
     ### Routes
 
-    from . import dashboard
-    app.register_blueprint(dashboard.bp)
-
-    import plzidx
-    @app.route('/dump')
-    def dump():
-        return "".join(plzidx.plzidx.dump())
+    from . import views
+    app.register_blueprint(views.bp)
 
     return app

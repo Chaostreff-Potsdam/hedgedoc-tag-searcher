@@ -41,16 +41,20 @@ def format_pad(pad):
    return f"<a href=\"{current_app.config['PAD_URL']}/{pad.url}\">{pad.title}</a>"
 
 
-def most_common_tags(tag_text_list, n=5):
-    if not tag_text_list:
-        related = Tag.get_most_common(n)
-    else:
-        related = Tag.get_related_tags(Tag.query.filter(Tag.text.in_(tag_text_list)).all(), n)
-    
-    related_t =  "\n".join(f"<li><a href=\"/{'/'.join(['pads'] + tag_text_list)}/{t.text}\">{t.text}</a></li>" for t in related)
-    pads = "\n".join(f"<li>{format_pad(p)}</li>" for p in sorted(Pad.get_by_taglist(tag_text_list), key=lambda p: p.title))
+def most_common(n=5):
+    return Tag.get_most_common(n)
 
-    return related_t + "<hr>" + pads
+
+def most_common_tags_and_pads(tag_text_list, n=5):
+    if not tag_text_list:
+        related = most_common(n)
+    else:
+        tag_list = Tag.query.filter(Tag.text.in_(tag_text_list)).all()
+        related = Tag.get_related_tags(tag_list, n)
+    
+    pads = sorted(Pad.get_by_taglist(tag_text_list), key=lambda p: p.title)
+
+    return related, pads
 
 
 def dump():
