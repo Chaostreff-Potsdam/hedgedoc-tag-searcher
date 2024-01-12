@@ -61,21 +61,23 @@ class Tag(db.Model):
         
         return query.all()
     
-    # Return the list of most the n tags that are most commonly used with the given ones
+    
+    # Returns the list of tags used by the pads, which are not already in the given filter_tag_texts list
     @classmethod
-    def get_related_tags(cls, tag_list, n):
-        res = (
+    def get_shared_tags_and_count(cls, filter_tag_texts, pads):
+        if not pads:
+            return []
+        
+        tags = (
             db.session.query(cls, func.count(association_table.c.pad_uuid).label('pad_count'))
             .join(association_table, cls.id == association_table.c.tag_id)
-            .filter(association_table.c.pad_uuid.in_([p.uuid for p in tag_list[0].pads]))
-            .filter(cls.text.notin_([t.text for t in tag_list]))
+            .filter(association_table.c.pad_uuid.in_([p.uuid for p in pads]))
             .group_by(cls.id)
-            .order_by(func.count(association_table.c.pad_uuid).desc(), cls.text.asc())
-            .limit(n)
         ).all()
+        
+        return [(t, sum(1 for p in pads if t in p.tags)) for t, _c in tags if t.text not in filter_tag_texts]
 
-        return [r[0] for r in res]
-    
+
 
 
 class Pad(db.Model):

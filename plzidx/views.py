@@ -21,7 +21,9 @@ def pads_with_tags(tag_path):
 	else:
 		pads = sorted(db.Pad.get_by_taglist(tag_text_list), key=lambda p: p.title)
 
-	return render_template('pads.html', pads=pads, tag_text_list=tag_text_list)
+	related_tags = db.Tag.get_shared_tags_and_count(tag_text_list, pads)
+
+	return render_template('pads.html', pads=pads, tag_text_list=tag_text_list, related_tags=related_tags)
 
 @bp.route('/', methods=['GET'])
 def index():

@@ -15,7 +15,7 @@
   {% for tag, count in common_tags %}
   <div class="control">
     <div class="tags has-addons are-large">
-      <a class="tag is-primary" href="{{ url_for('.pads_with_tags', tag_path=tag.text) }}">{{ tag.text }}</a>
+      <a class="tag is-info is-light" href="{{ url_for('.pads_with_tags', tag_path=tag.text) }}">{{ tag.text }}</a>
       <span class="tag">{{ count }}</span>
     </div>
   </div>

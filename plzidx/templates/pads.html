@@ -17,6 +17,14 @@
 		</div>
 	</div>
 	{% endfor %}
+	{% for tag, count in related_tags %}
+	<div class="control">
+		<div class="tags has-addons are-large">
+		<a class="tag is-info is-light" href="{{ url_for('.pads_with_tags', tag_path='/'.join(tag_text_list + [tag.text])) }}">{{ tag.text }}</a>
+		  <span class="tag">{{ count }}</span>
+		</div>
+	  </div>
+	{% endfor %}
 </div>
 
 <hr />
