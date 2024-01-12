@@ -4,7 +4,8 @@ import plzidx
 
 bp = Blueprint('dashboard', __name__)
 
-@bp.route('/<starttag>', methods=('GET', 'POST'))
-def index(starttag):
-	return "Most common tags with '" + starttag + "': " + plzidx.plzidx.most_common_tags(starttag)
-    #return render_template('dashboard.html')
+@bp.route('/pads/<path:tag_path>', methods=['GET'])
+@bp.route('/pads/', defaults={'tag_path': ''}, methods=['GET'])
+def pads_with_tags(tag_path):
+	tags = list(filter(bool, tag_path.split('/')))
+	return plzidx.plzidx.most_common_tags(tags)
