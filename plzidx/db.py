@@ -53,7 +53,7 @@ class Tag(db.Model):
             db.session.query(cls, func.count(association_table.c.pad_uuid).label('pad_count'))
             .join(association_table, cls.id == association_table.c.tag_id)
             .group_by(cls.id)
-            .order_by(func.count(association_table.c.pad_uuid).desc())
+            .order_by(func.count(association_table.c.pad_uuid).desc(), cls.text.asc())
         )
 
         if limit_n is not None:
@@ -70,7 +70,7 @@ class Tag(db.Model):
             .filter(association_table.c.pad_uuid.in_([p.uuid for p in tag_list[0].pads]))
             .filter(cls.text.notin_([t.text for t in tag_list]))
             .group_by(cls.id)
-            .order_by(func.count(association_table.c.pad_uuid).desc())
+            .order_by(func.count(association_table.c.pad_uuid).desc(), cls.text.asc())
             .limit(n)
         ).all()
 
