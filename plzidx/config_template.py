@@ -5,6 +5,7 @@ default_config = dict(
 	SECRET_KEY="development",
 	MARKER_TAG="plzidx",
 	INDEX_ALL_PADS=False,
+	PAD_PERMISSION_FILTER=('freely', 'editable'),
 )
 
 def create_config_template():
@@ -33,5 +34,11 @@ SQLALCHEMY_DATABASE_URI =
 # MARKER_TAG = "{default_config["MARKER_TAG"]}"
 
 ## If the MARKER_TAG should be ignored and all pads indexed instead
+## (does not override the PAD_PERMISSION_FILTER)
 # INDEX_ALL_PADS = {default_config["INDEX_ALL_PADS"]}
+
+## Only pads with these permissions will be indexed
+## Possible tuple entries:
+##   'freely', 'editable', 'limited', 'locked', 'protected', 'private'
+# PAD_PERMISSION_FILTER = {default_config["PAD_PERMISSION_FILTER"]}
 """

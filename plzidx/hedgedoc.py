@@ -8,8 +8,8 @@ class Hededoc(object):
 
     # Back in the CodiMD it was: '###### tags: `features` `cool` `updated`'
     legacy_tag_key = '###### tags:'
-    notes_since_clause = ' WHERE "updatedAt" >= %s'
-    notes_query = 'SELECT id, content, title, alias, shortid, "updatedAt" FROM "Notes"'
+    notes_query = 'SELECT id, content, title, alias, shortid, "updatedAt" FROM "Notes" WHERE (permission IN %s) '
+    notes_since_clause = ' AND ("updatedAt" >= %s)'
 
     def __init__(self, config):
         self.conn = psycopg2.connect(
@@ -17,13 +17,14 @@ class Hededoc(object):
             user=config["HEDGEDOC_DB_USER"],
             password=config["HEDGEDOC_DB_PASS"],
             host=config["HEDGEDOC_DB_HOST"])
+        self.permission_filter = config["PAD_PERMISSION_FILTER"]
 
     def get_notes_since(self, minimum_datetime=None):
         with self.conn.cursor() as cur:
             if minimum_datetime is None:
-                cur.execute(self.notes_query + ";")
+                cur.execute(self.notes_query + ";", (self.permission_filter, ))
             else:
-                cur.execute(self.notes_query + self.notes_since_clause + ";", (minimum_datetime, ))
+                cur.execute(self.notes_query + self.notes_since_clause + ";", (self.permission_filter, minimum_datetime, ))
             return cur.fetchall()
 
     def parse_yaml_tags(self, document):
