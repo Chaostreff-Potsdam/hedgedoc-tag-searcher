@@ -3,6 +3,14 @@
 {% block content %}
 
 
+{% if not common_tags %}
+
+<div class="notification is-warning">
+	No tags found. :(
+</div>
+
+{% else %}
+
 <div class="field is-grouped is-grouped-multiline">
   {% for tag, count in common_tags %}
   <div class="control">
@@ -13,6 +21,8 @@
   </div>
   {% endfor %}
 </div>
+
+{% endif %}
 
 
 {% endblock %}

@@ -21,6 +21,11 @@
 
 <hr />
 
+{% if not pads %}
+<div class="notification is-warning">
+	No pads found. :(
+</div>
+{% else %}
 <ul>
 {% for pad in pads %}
 <li><a href="{{ config.PAD_URL }}/{{ pad.url }}">{{ pad.title }}</a>
@@ -38,5 +43,6 @@
 </li>
 {% endfor %}
 </ul>
+{% endif %}
 
 {% endblock %}
