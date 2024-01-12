@@ -41,16 +41,6 @@ def format_pad(pad):
    return f"<a href=\"{current_app.config['PAD_URL']}/{pad.url}\">{pad.title}</a>"
 
 
-def most_common(n=5):
-    return Tag.get_most_common(n)
-
-
-def pads_with_tags(tag_text_list):
-    if not tag_text_list:
-        return []
-    
-    return sorted(Pad.get_by_taglist(tag_text_list), key=lambda p: p.title)
-
 def dump():
     yield "<ul>"
     for tag in Tag.query.order_by(Tag.text).all():

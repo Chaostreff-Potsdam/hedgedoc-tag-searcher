@@ -46,18 +46,20 @@ class Tag(db.Model):
             db.session.commit()
         return tag
     
-    # Return the list of most commonly used tags
+    # Return the list of most commonly used tags and their usage count
     @classmethod
-    def get_most_common(cls, n):
-        res = (
+    def get_most_common(cls, limit_n=None):
+        query = (
             db.session.query(cls, func.count(association_table.c.pad_uuid).label('pad_count'))
             .join(association_table, cls.id == association_table.c.tag_id)
             .group_by(cls.id)
             .order_by(func.count(association_table.c.pad_uuid).desc())
-            .limit(n)
-        ).all()
+        )
 
-        return [r[0] for r in res]
+        if limit_n is not None:
+            query = query.limit(limit_n)
+        
+        return query.all()
     
     # Return the list of most the n tags that are most commonly used with the given ones
     @classmethod
