@@ -39,7 +39,7 @@
 
 <footer class="footer">
 	<div class="content has-text-centered">
-		Only indexing pads with {% if not config.INDEX_ALL_PADS %} maker tag <code>{{ config.MARKER_TAG }}</code> and {% endif %}permissions {% for perm in config.PAD_PERMISSION_FILTER %}<code>{{ perm }}</code>{% if not loop.last %}, {% endif %}{% endfor %}.
+		Only indexing pads with {% if not config.INDEX_ALL_PADS %} maker tag <code>{{ config.MARKER_TAG }}</code> and {% endif %}permission{{ "s" if config.PAD_PERMISSION_FILTER|length > 1 else "" }} {% for perm in config.PAD_PERMISSION_FILTER %}<code>{{ perm }}</code>{% if not loop.last %}, {% endif %}{% endfor %}.
 	</div>
 </footer>
 
