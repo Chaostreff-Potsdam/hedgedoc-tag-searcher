@@ -8,7 +8,7 @@ class Hededoc(object):
 
     # Back in the CodiMD it was: '###### tags: `features` `cool` `updated`'
     legacy_tag_key = '###### tags:'
-    notes_query = 'SELECT id, content, title, alias, shortid, "updatedAt" FROM "Notes" WHERE (permission IN %s) '
+    notes_query = 'SELECT id, content, title, alias, shortid, "updatedAt" FROM "Notes" WHERE (permission IN %s) AND (length(content) > 0)'
     notes_since_clause = ' AND ("updatedAt" >= %s)'
 
     def __init__(self, config):
