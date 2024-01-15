@@ -6,6 +6,7 @@ default_config = dict(
 	MARKER_TAG="plzidx",
 	INDEX_ALL_PADS=False,
 	PAD_PERMISSION_FILTER=('freely', 'editable'),
+	BRAND_BULMA_URL=None,
 )
 
 def create_config_template():
@@ -41,4 +42,8 @@ SQLALCHEMY_DATABASE_URI =
 ## Possible tuple entries:
 ##   'freely', 'editable', 'limited', 'locked', 'protected', 'private'
 # PAD_PERMISSION_FILTER = {default_config["PAD_PERMISSION_FILTER"]}
+
+## For a customized theme, you can override the default CSS path
+## If None, please install a current Bulma as static/css/bulma.min.css
+# BRAND_BULMA_URL = {default_config["BRAND_BULMA_URL"]}
 """
