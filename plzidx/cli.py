@@ -2,13 +2,15 @@ import click
 from flask import Blueprint, g, current_app
 from flask.cli import with_appcontext
 
-from . import plzidx, hedgedoc, config_template
+from . import config_template
 
 COMMAND_NAME = 'plzidx-ctrl'
 
 bp = Blueprint(COMMAND_NAME, __name__)
 
 def with_hedgedoc_g(a_func):
+
+    from . import hedgedoc
 
     def wrap_function(*args, **kwargs):
         g.hedgedoc = hedgedoc.Hededoc(current_app.config)
@@ -21,6 +23,7 @@ def with_hedgedoc_g(a_func):
 @with_appcontext
 @with_hedgedoc_g
 def update():
+    from . import plzidx
     plzidx.update()
 
 
@@ -28,6 +31,7 @@ def update():
 @with_appcontext
 @with_hedgedoc_g
 def dump():
+    from . import plzidx
     print("".join(plzidx.dump()))
 
 
