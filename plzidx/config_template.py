@@ -1,6 +1,8 @@
 
 import secrets
 
+config_env_var_name = "PLZIDX_CONFIG_PATH"
+
 default_config = dict(
 	SECRET_KEY="development",
 	MARKER_TAG="plzidx",
