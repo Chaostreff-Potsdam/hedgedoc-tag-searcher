@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, ForeignKeyConstraint, func
 from typing import List
-from sqlalchemy.orm import declarative_base, mapped_column, relationship, Mapped
+from sqlalchemy.orm import declarative_base, relationship
 
 import datetime
 
@@ -29,10 +29,10 @@ association_table = Table(
 class Tag(db.Model):
     __tablename__ = 'tag'
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    text: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    id = Column(Integer, primary_key=True)
+    text = Column(String, unique=True, nullable=False)
 
-    pads: Mapped[List['Pad']] = relationship('Pad', secondary=association_table, back_populates='tags')
+    pads = relationship('Pad', secondary=association_table, back_populates='tags')
 
     def __repr__(self):
         return f'<Tag text={self.text}>'
@@ -85,13 +85,13 @@ class Tag(db.Model):
 class Pad(db.Model):
     __tablename__ = 'pad'
 
-    uuid: Mapped[str] = mapped_column(String, primary_key=True, nullable=False)
-    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)
+    uuid = Column(String, primary_key=True, nullable=False)
+    updatedAt = Column(DateTime, nullable=False)
 
-    title: Mapped[str] = mapped_column(String)
-    url: Mapped[str] = mapped_column(String, nullable=False)
+    title = Column(String)
+    url = Column(String, nullable=False)
 
-    tags: Mapped[List['Tag']] = relationship('Tag', secondary=association_table, back_populates='pads')
+    tags = relationship('Tag', secondary=association_table, back_populates='pads')
 
     def __repr__(self):
         return f'<Pad uuid={self.uuid}, updatedAt={self.updatedAt}>'
