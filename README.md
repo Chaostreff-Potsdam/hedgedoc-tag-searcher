@@ -62,7 +62,7 @@ To rebuild an index you can use a cronjob/systemd-timer periodically calling:
 
 ## Limitations
 
-To many to count, but notable ones are:
+Too many to count, but notable ones are:
 
 * At the moment, `plzidx-ctrl update` rebuilds the entire index (expensive!). Given enough time we will eventually only do so on updated pads, or provide a PostgreSQL Hook. But hopefully this project will render itself superfluous, as soon as HedgeDoc 2 with its [Explore feature](https://github.com/hedgedoc/hedgedoc/issues/3833) gets released.
 * Likewise, our tool needs read-access to the Hedgedoc database and expects a HedgeDoc pre-2 version. This will break, but again, then we hope this project is superfluous.
