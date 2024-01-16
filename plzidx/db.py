@@ -75,7 +75,9 @@ class Tag(db.Model):
             .group_by(cls.id)
         ).all()
         
-        return [(t, sum(1 for p in pads if t in p.tags)) for t, _c in tags if t.text not in filter_tag_texts]
+        return sorted(((t, sum(1 for p in pads if t in p.tags)) 
+                       for t, _c in tags if t.text not in filter_tag_texts), 
+                       reverse=True, key=lambda x: (x[1],x[0].text))
 
 
 
