@@ -1,0 +1,22 @@
+[project]
+name = "hedgedoc-tag-searcher"
+version = "0.01"
+description =  "Global search for Hedgedoc pads by tags"
+license = {text = "MIT License"}
+
+dependencies = [
+	"Flask",
+	"Flask-SQLAlchemy",
+
+	"psycopg2-binary",
+	"pyyaml",
+	"python-dotenv",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Repository = "https://github.com/Chaostreff-Potsdam/hedgedoc-tag-searcher.git"
+Issues = "https://github.com/Chaostreff-Potsdam/hedgedoc-tag-searcher/issues"
+
+[tool.setuptools.packages]
+find = {}
