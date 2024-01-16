@@ -11,7 +11,15 @@ def create_app(test_config=None):
     app.config.from_mapping(config_template.default_config)
 
     if test_config is None:
-        app.config.from_pyfile('config.py', silent=False)
+        try:
+            app.config.from_pyfile('config.py', silent=False)
+        except FileNotFoundError as e:
+            from . import cli
+            if cli.is_in_createconfig_mode():
+                cli.init_cli(app)
+                return app
+            else:
+                raise e
     else:    
         app.config.from_mapping(test_config)
 
