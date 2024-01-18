@@ -18,5 +18,5 @@ requires-python = ">=3.8"
 Repository = "https://github.com/Chaostreff-Potsdam/hedgedoc-tag-searcher.git"
 Issues = "https://github.com/Chaostreff-Potsdam/hedgedoc-tag-searcher/issues"
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+where = ["plzidx"]
