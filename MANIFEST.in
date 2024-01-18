@@ -1,0 +1,4 @@
+graft plzidx/static
+graft plzidx/templates
+
+global-exclude *.py[cod]
