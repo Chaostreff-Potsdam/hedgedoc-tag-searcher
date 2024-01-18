@@ -35,6 +35,15 @@ def dump():
     print("".join(plzidx.dump()))
 
 
+@bp.cli.command('append-tag')
+@click.argument('uuid')
+@click.argument('tag')
+@with_appcontext
+@with_hedgedoc_g
+def append_tag(uuid, tag):
+    g.hedgedoc.append_tag(uuid, tag)
+
+
 @bp.cli.command('createconfig')
 @click.option('-o', '--output', 'output', default='-', type=click.File('w'), show_default=True)
 def createconfig(output):
