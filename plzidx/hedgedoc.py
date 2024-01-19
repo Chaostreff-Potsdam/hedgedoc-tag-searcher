@@ -65,13 +65,17 @@ class Hededoc(object):
             except:
                 return None
     
-    def append_tag(self, uuid, tag):
+    def append_tag(self, uuid, tag, dry_run):
         content = self.get_pad_content(uuid)
         tagger = HedgedocTagger(content, tag)
         if tagger.try_add_tag():
-            with self.conn.cursor() as cur:
-                cur.execute(self.note_update_content_stmt, (tagger.new_text, uuid, ))
-                self.conn.commit()
+            if not dry_run:
+                with self.conn.cursor() as cur:
+                    cur.execute(self.note_update_content_stmt, (tagger.new_text, uuid, ))
+                    self.conn.commit()
+            return tagger.new_text
+        else:
+            return None
 
 
 class HedgedocTagger(object):

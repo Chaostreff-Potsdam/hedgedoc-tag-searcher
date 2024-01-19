@@ -27,21 +27,32 @@ def update():
     plzidx.update()
 
 
-@bp.cli.command('dump')
+@bp.cli.command('htmldump')
 @with_appcontext
 @with_hedgedoc_g
-def dump():
+def htmldump():
     from . import plzidx
     print("".join(plzidx.dump()))
+
+
+@bp.cli.command('dump-pad')
+@click.argument('uuid')
+@with_appcontext
+@with_hedgedoc_g
+def dump_pad(uuid):
+    print(g.hedgedoc.get_pad_content(uuid))
 
 
 @bp.cli.command('append-tag')
 @click.argument('uuid')
 @click.argument('tag')
+@click.option('--dry-run', is_flag=True)
 @with_appcontext
 @with_hedgedoc_g
-def append_tag(uuid, tag):
-    g.hedgedoc.append_tag(uuid, tag)
+def append_tag(uuid, tag, dry_run):
+    text = g.hedgedoc.append_tag(uuid, tag, dry_run)
+    if dry_run and text:
+        print(text)
 
 
 @bp.cli.command('createconfig')
