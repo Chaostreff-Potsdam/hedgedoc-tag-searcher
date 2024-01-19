@@ -44,22 +44,11 @@ class Hededoc(object):
         for line in text.split("\n"):
             if self.legacy_tag_key in line:
                 res.extend(self.parse_legacy_tags(line))
-        # HedgeDoc encourages YAML-Metadata
+        # HedgeDoc encourages YAML-Metadata _at the start_ of the document
         try:
-            for doc in yaml.load_all(text, Loader=yaml.Loader):
-                if (tags := self.parse_yaml_tags(doc)):
-                    res.extend(tags)
-        except yaml.error.YAMLError:
+            doc = next(yaml.load_all(text, Loader=yaml.Loader))
+            res.extend(self.parse_yaml_tags(doc))
+        except (StopIteration, yaml.error.YAMLError):
             pass
         return set(res)
-           
-    def get_pad_field(self, uuid, field):
-        with self.conn.cursor() as cur:
-            try:
-                cur.execute(f'SELECT {field} FROM "Notes" WHERE id = %s', (uuid, ))
-                return cur.fetchone()[0]
-            except:
-                return None
-    
-    def get_pad_title(self, uuid):
-        return self.get_pad_field(uuid, "title")
+
